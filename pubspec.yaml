@@ -3,6 +3,10 @@ description: Interactive biometrics dashboard with synchronized charts and perfo
 publish_to: 'none'
 
 version: 1.0.0+1
+# In pubspec.yaml
+scripts:
+  deploy: "gh-pages -d build/web"
+
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
