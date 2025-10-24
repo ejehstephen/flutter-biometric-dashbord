@@ -104,15 +104,27 @@ class _StepsChartState extends State<StepsChart> {
                             ],
                           ))
                       .toList(),
+                  extraLinesData: ExtraLinesData(
+                    verticalLines: [
+                      if (widget.selectedX != null)
+                        VerticalLine(
+                          x: widget.selectedX!,
+                          color: Colors.orange,
+                          strokeWidth: 2,
+                        ),
+                    ],
+                  ),
                   barTouchData: BarTouchData(
                     enabled: true,
                     handleBuiltInTouches: true,
                     touchCallback:
                         (FlTouchEvent event, BarTouchResponse? response) {
-                      if (event is FlTapUpEvent || event is FlPanUpdateEvent) {
+                      if (event is FlTapUpEvent) {
                         if (response?.spot != null) {
                           widget.onXChanged(
                               response!.spot!.touchedBarGroup.x.toDouble());
+                        } else {
+                          widget.onXChanged(null);
                         }
                       }
                     },

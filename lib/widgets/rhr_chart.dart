@@ -107,13 +107,26 @@ class _RHRChartState extends State<RHRChart> {
                       dotData: FlDotData(show: false),
                     ),
                   ],
+                  extraLinesData: ExtraLinesData(
+                    verticalLines: [
+                      if (widget.selectedX != null)
+                        VerticalLine(
+                          x: widget.selectedX!,
+                          color: Colors.orange,
+                          strokeWidth: 2,
+                        ),
+                    ],
+                  ),
                   lineTouchData: LineTouchData(
                     enabled: true,
                     handleBuiltInTouches: true,
-                    touchCallback: (FlTouchEvent event, LineTouchResponse? response) {
-                      if (event is FlTapUpEvent || event is FlPanUpdateEvent) {
+                    touchCallback:
+                        (FlTouchEvent event, LineTouchResponse? response) {
+                      if (event is FlTapUpEvent) {
                         if (response?.lineBarSpots?.isNotEmpty ?? false) {
                           widget.onXChanged(response!.lineBarSpots!.first.x);
+                        } else {
+                          widget.onXChanged(null);
                         }
                       }
                     },
@@ -125,8 +138,9 @@ class _RHRChartState extends State<RHRChart> {
                               FlLine(color: Colors.red, strokeWidth: 2),
                               FlDotData(
                                 show: true,
-                                getDotPainter: (spot, percent, barData, index) =>
-                                    FlDotCirclePainter(
+                                getDotPainter:
+                                    (spot, percent, barData, index) =>
+                                        FlDotCirclePainter(
                                   radius: 6,
                                   color: Colors.red,
                                   strokeWidth: 2,

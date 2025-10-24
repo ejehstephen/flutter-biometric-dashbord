@@ -111,7 +111,7 @@ class _HRVChartState extends State<HRVChart> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Tap to sync across charts • Swipe to pan',
+              'Tap to sync across charts • Swipe to pan • Pinch to zoom',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 16),
@@ -152,16 +152,26 @@ class _HRVChartState extends State<HRVChart> {
                   ),
                   lineBarsData: _getLineChartBarData(),
                   extraLinesData: ExtraLinesData(
-                    verticalLines: _getVerticalLines(),
+                    verticalLines: [
+                      ..._getVerticalLines(),
+                      if (widget.selectedX != null)
+                        VerticalLine(
+                          x: widget.selectedX!,
+                          color: Colors.orange,
+                          strokeWidth: 2,
+                        ),
+                    ],
                   ),
                   lineTouchData: LineTouchData(
                     enabled: true,
                     handleBuiltInTouches: true,
                     touchCallback:
                         (FlTouchEvent event, LineTouchResponse? response) {
-                      if (event is FlTapUpEvent || event is FlPanUpdateEvent) {
+                      if (event is FlTapUpEvent) {
                         if (response?.lineBarSpots?.isNotEmpty ?? false) {
                           widget.onXChanged(response!.lineBarSpots!.first.x);
+                        } else {
+                          widget.onXChanged(null);
                         }
                       }
                     },
